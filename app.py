@@ -48,7 +48,7 @@ def db_insert():
     conn.close()
     return "Basketball Table Successfully Populated"
 
-@app.route('/db_select')
+@app.route('/db_select') # Queries the basketball table, then loops over the response and formats it into a string with html tags before returning to the browser
 def db_select():
     conn = conn = psycopg2.connect("postgresql://render_tutorial_db_user:cQINwvX4yWTeP2NinFsZ2NIEA536CX6f@dpg-cvhkpkhc1ekc738cjee0-a/render_tutorial_db")
     cur = conn.cursor()
@@ -66,3 +66,15 @@ def db_select():
         response_string +="</tr>"
     response_string += "</table>"
     return response_string
+
+@app.route('/db_drop') #drops the basketball table from the PostgreSQL db
+def deb_drop():
+    conn = conn = psycopg2.connect("postgresql://render_tutorial_db_user:cQINwvX4yWTeP2NinFsZ2NIEA536CX6f@dpg-cvhkpkhc1ekc738cjee0-a/render_tutorial_db")
+    cur = conn.cursor()
+    cur.execute('''
+    DROP TABLE Basketball;
+    ''')
+    conn.commit()
+    conn.close()
+    return "Basketball Table Successfully Dropped"
+
