@@ -15,7 +15,7 @@ def db_test():
     conn.close()
     return "Database Connection Successful"
 
-@app.route('/db_create') #Creates a table in the PostgrSQL db and returns a string to the browser to confirm.
+@app.route('/db_create') #Creates the basketball table in the PostgrSQL db and returns a string to the browser to confirm.
 def db_create():
     conn = conn = psycopg2.connect("postgresql://render_tutorial_db_user:cQINwvX4yWTeP2NinFsZ2NIEA536CX6f@dpg-cvhkpkhc1ekc738cjee0-a/render_tutorial_db")
     cur = conn.cursor()
@@ -32,7 +32,7 @@ def db_create():
     conn.close()
     return "Basketball Table Successfully Created"
 
-@app.route('/db_insert')
+@app.route('/db_insert') #Populates the basketball table and returns a string to the browser to confirm.
 def db_insert():
     conn = conn = psycopg2.connect("postgresql://render_tutorial_db_user:cQINwvX4yWTeP2NinFsZ2NIEA536CX6f@dpg-cvhkpkhc1ekc738cjee0-a/render_tutorial_db")
     cur = conn.cursor()
@@ -47,3 +47,22 @@ def db_insert():
     conn.commit()
     conn.close()
     return "Basketball Table Successfully Populated"
+
+@app.route('/db_select')
+def db_select():
+    conn = conn = psycopg2.connect("postgresql://render_tutorial_db_user:cQINwvX4yWTeP2NinFsZ2NIEA536CX6f@dpg-cvhkpkhc1ekc738cjee0-a/render_tutorial_db")
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT * FROM Basketball;
+    ''')
+    records = cur.fetchall()
+    conn.close()
+    response_string = ""
+    response_string += "<table>"
+    for player in records:
+        response_string += "<tr>"
+        for info in player:
+            response_string += "<td>{}</td>".format(info)
+        response_string +="</tr>"
+    response_string += "</table>"
+    return response_string
